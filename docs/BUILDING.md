@@ -1,6 +1,6 @@
 ## Python Package
 
-The Python package is located in `src/mcp_transport_proto`.
+The Python package is located in `src/mcp_grpc_transport_proto`.
 
 ### Prerequisites
 

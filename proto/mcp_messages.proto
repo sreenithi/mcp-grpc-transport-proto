@@ -97,7 +97,7 @@ enum Role {
 
 message Annotations {
   repeated Role audience = 1;
-  float priority = 2;  // Must be in range [0,1].
+  optional float priority = 2;  // Must be in range [0,1].
 }
 
 message TextContent {
@@ -146,9 +146,9 @@ message SamplingCreateMessageRequest {
       string name = 1;  // Optional.
     }
     repeated ModelHint hints = 1;
-    float intelligence_priority = 2;
-    float speed_priority = 3;
-    float cost_priority = 4;
+    optional float intelligence_priority = 2;
+    optional float speed_priority = 3;
+    optional float cost_priority = 4;
   }
   ModelPreferences model_preferences = 2;  // Optional.
 
@@ -161,8 +161,8 @@ message SamplingCreateMessageRequest {
   }
   IncludeContext include_context = 4;  // Optional.
 
-  float temperature = 5;              // Optional.
-  int32 max_tokens = 6;               // Optional.
+  optional float temperature = 5;
+  int32 max_tokens = 6;
   repeated string stop_sequence = 7;  // Optional.
 }
 
@@ -183,16 +183,27 @@ message PrimitiveSchemaDefinition {
     }
     string title = 1;
     string description = 2;
-    uint64 min_length = 3;
-    uint64 max_length = 4;
+    optional uint64 min_length = 3;
+    optional uint64 max_length = 4;
     Format format = 5;
   }
 
   message NumberSchema {
+    message DoubleRange {
+      optional double minimum = 1;
+      optional double maximum = 2;
+    }
+    message IntegerRange {
+      optional int64 minimum = 1;
+      optional int64 maximum = 2;
+    }
     string title = 1;
     string description = 2;
-    uint64 minimum = 3;
-    uint64 maximum = 4;
+    uint64 minimum = 3 [deprecated = true];
+    uint64 maximum = 4 [deprecated = true];
+    // Only one of these fields must be set.
+    DoubleRange double_range = 5;
+    IntegerRange integer_range = 6;
   }
 
   message BooleanSchema {
@@ -202,10 +213,23 @@ message PrimitiveSchemaDefinition {
   }
 
   message EnumSchema {
+    message MultiSelect {
+      repeated string default_items = 1;
+      optional uint32 min_items = 2;
+      optional uint32 max_items = 3;
+    }
+    message SingleSelect {
+      optional string default_item = 1;
+    }
     string title = 1;
     string description = 2;
     repeated string enum_list = 3;
     repeated string enum_names = 4;
+    // No more than one of these must be set.
+    // If neither is set, we assume single_select
+    // with no default value.
+    SingleSelect single_select = 5;
+    MultiSelect multi_select = 6;
   }
 
   // Exactly one of these fields will be present.
@@ -484,6 +508,6 @@ message CompletionResponse {
   ResponseFields common = 1;
 
   repeated string values = 2;
-  int64 total_matches = 3;  // Optional.
-  bool has_more = 4;        // Optional.
+  optional int64 total_matches = 3;
+  bool has_more = 4;
 }

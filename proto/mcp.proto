@@ -7,6 +7,7 @@ syntax = "proto3";
 package model_context_protocol;
 
 import "mcp_messages.proto";
+import "xyz.proto"
 
 option java_multiple_files = true;
 option java_outer_classname = "McpProto";
@@ -69,4 +70,8 @@ service Mcp {
   // mcp_resource whose value is the name of the resource or prompt being
   // used for completion.
   rpc Complete(CompletionRequest) returns (CompletionResponse);
+}
+
+service DummyService {
+  rpc DoSomething(DummyRequest) returns (DummyResponse);
 }

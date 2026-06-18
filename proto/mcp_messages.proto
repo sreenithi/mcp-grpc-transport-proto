@@ -487,3 +487,11 @@ message CompletionResponse {
   int64 total_matches = 3;  // Optional.
   bool has_more = 4;        // Optional.
 }
+
+message DummyRequest {
+  string data = 1;
+}
+
+message DummyResponse {
+  string data = 1;
+}

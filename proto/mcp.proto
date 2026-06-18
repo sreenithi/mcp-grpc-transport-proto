@@ -7,7 +7,7 @@ syntax = "proto3";
 package model_context_protocol;
 
 import "mcp_messages.proto";
-import "xyz.proto"
+import "xyz.proto";
 
 option java_multiple_files = true;
 option java_outer_classname = "McpProto";
